@@ -39,11 +39,20 @@ docker.listContainers()
       "py": "python"
     }
   })
+  let ignoreExit = false;
   nodemon.on('start', function(){
     console.log("starting cname.py")
   })
   .on('restart', function(files){
+    ignoreExit = true;
     console.log("restarting cname.py with " + files)
+  })
+  .on('exit', () => {
+    if(ignoreExit) {
+      ignoreExit = false;
+      return;
+    };
+    process.exit();
   })
 })
 .then(() => {
